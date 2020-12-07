@@ -89,25 +89,25 @@ int DecodePacket(UCHAR *buffer, int len, FIELDS *S,UCHAR *IP)
    memcpy(D,p,strlen(p));
    t=strchr(D,';');         if(!t) return 0;
    t[0]=0;   t++;           S->PlayerName=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           //drop it 
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->Version=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->cPlayers=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->mPlayers=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           //drop it
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->WorldName=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->GameMode=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           //drop it
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;   t++;           S->Port=t;
-   t=strchr(t,';');         if(!t) return;
+   t=strchr(t,';');         if(!t) return 0;
    t[0]=0;                  //drop it
    
 return 1;
