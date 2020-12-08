@@ -15,7 +15,6 @@ SOCKET  ServerSock;
 struct sockaddr_in server;
 struct sockaddr_in client;
 
-
 #define MAGICNUMBER {0,0xff,0xff,0,0xfe,0xfe,0xfe,0xfe,0xfd,0xfd,0xfd,0xfd,0x12,0x34,0x56,0x78}
 
 typedef struct PACKED REQUEST_UNCONNECTED_PING_
@@ -26,7 +25,6 @@ typedef struct PACKED REQUEST_UNCONNECTED_PING_
 }REQUEST_UNCONNECTED_PING;
 
 REQUEST_UNCONNECTED_PING PACKED_UNCONNECTED_PING={1,{0},MAGICNUMBER};
-
 
 typedef struct PACKED RESPONCE_UNCONNECTED_PONG_
 {
@@ -48,7 +46,6 @@ typedef struct fields
     UCHAR *GameMode;
     UCHAR *Port;   
 }FIELDS;
-
 
 HINSTANCE ins;
 HWND hWnd;
@@ -159,11 +156,11 @@ void Ping()
   SetWindowText(IntPortStart,""); SetWindowText(IntPortEnd,"");
   SetWindowText(ToIP,"");  SetWindowText(Name,""); SetWindowText(Version,"");
   SetWindowText(World,"");  SetWindowText(Mode,"");      
-  //create socket for both server and client, same socket different ports
+  //create socket for both server and client
   ServerSock = socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
   if(ServerSock==INVALID_SOCKET)
   { 
-      MessageBox(hWnd, "Cant't init DHCP socket","Error",MB_OK | MB_ICONWARNING | MB_SYSTEMMODAL);
+      MessageBox(hWnd, "Cant't init socket","Error",MB_OK | MB_ICONWARNING | MB_SYSTEMMODAL);
       EnableWindow(Start,1);
       return;
   }
@@ -182,7 +179,7 @@ void Ping()
   //bind the socket
   if(SendMessage(Bind,BM_GETCHECK,0,0)==BST_CHECKED)
   {
-  	    ret = bind(ServerSock, (struct sockaddr*)&server, sizeof(server));
+  	ret = bind(ServerSock, (struct sockaddr*)&server, sizeof(server));
         if(ret!=0)
         { 
              MessageBox(hWnd, "Cant't bind to socket","Error",MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
@@ -230,7 +227,7 @@ void Ping()
           }
           else
           {
-              break;
+              break;//make compiler happy ^_^
           }
      }while(ret>0);
   }
@@ -253,7 +250,7 @@ void ShowConfig(int n)
      SetWindowText(Name,D[n].PlayerName);
      SetWindowText(Version,D[n].Version);
      SetWindowText(World,D[n].WorldName);
-     sprintf(temp,"%s    %s / %s Players",D[n].GameMode,D[n].cPlayers,D[n].mPlayers);
+     sprintf(temp,"%s    %s / %s Players\0",D[n].GameMode,D[n].cPlayers,D[n].mPlayers);
      //SetWindowText(Mode,D[n].GameMode);
      SetWindowText(Mode,temp);
 }
@@ -264,48 +261,44 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
  {
   case WM_CREATE:
   {
-    hWnd=hwnd;
+        hWnd=hwnd;
 	CreateWindow("BUTTON","",WS_VISIBLE|WS_CHILD|BS_GROUPBOX,4,-4,186,36,hwnd,(HMENU)0,ins,NULL);
 	PingPort=CreateWindow("EDIT","19132",WS_CHILD|WS_VISIBLE|ES_NUMBER,10,9,47,17,hwnd,(HMENU)0,ins,NULL);
 	Bind=CreateWindow("BUTTON","bind",WS_CHILD|WS_VISIBLE|BS_AUTOCHECKBOX|BS_TEXT,63,9,57,17,hwnd,(HMENU)0,ins,NULL);
 	Start=CreateWindow("BUTTON","Ping",WS_CHILD|WS_VISIBLE,124,8,62,20,hwnd,(HMENU)ID_PING,ins,NULL);
-    SendMessage(PingPort,EM_SETLIMITTEXT,(WPARAM)0x5,(LPARAM)0); 
+        SendMessage(PingPort,EM_SETLIMITTEXT,(WPARAM)0x5,(LPARAM)0); 
 
 	CreateWindow("BUTTON","ExtPort",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,4,38,152,65,hwnd,(HMENU)0,ins,NULL);
-	
-    CreateWindow("BUTTON","Start",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,14,58,62,37,hwnd,(HMENU)0,ins,NULL);
+        CreateWindow("BUTTON","Start",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,14,58,62,37,hwnd,(HMENU)0,ins,NULL);
 	ExtPortStart=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,21,76,47,15,hwnd,(HMENU)0,ins,NULL);
-
 	CreateWindow("BUTTON","End",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,84,58,62,37,hwnd,(HMENU)0,ins,NULL);
 	ExtPortEnd=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,91,76,47,15,hwnd,(HMENU)0,ins,NULL);
 
 	CreateWindow("BUTTON","IntPort",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,164,38,152,65,hwnd,(HMENU)0,ins,NULL);
 	CreateWindow("BUTTON","Start",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,174,58,62,37,hwnd,(HMENU)0,ins,NULL);
 	IntPortStart=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,181,76,47,15,hwnd,(HMENU)0,ins,NULL);
-
 	CreateWindow("BUTTON","End",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,244,58,62,37,hwnd,(HMENU)0,ins,NULL);
 	IntPortEnd=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,251,76,47,15,hwnd,(HMENU)0,ins,NULL);
 
 	CreateWindow("BUTTON","IP",WS_VISIBLE|WS_CHILD|BS_GROUPBOX|BS_CENTER,324,38,129,65,hwnd,(HMENU)0,ins,NULL);
 	ToIP=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,331,76,115,15,hwnd,(HMENU)0,ins,NULL);
 	
-    CreateWindow("STATIC","NAME:",WS_CHILD|WS_VISIBLE,4,116,65,15,hwnd,(HMENU)0,ins,NULL);
-    Name=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,116,375,15,hwnd,(HMENU)0,ins,NULL);
-    CreateWindow("STATIC","VERSION:",WS_CHILD|WS_VISIBLE,4,136,65,15,hwnd,(HMENU)0,ins,NULL);
-    Version=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,136,375,15,hwnd,(HMENU)0,ins,NULL);
-    CreateWindow("STATIC","WORLD:",WS_CHILD|WS_VISIBLE,4,156,65,15,hwnd,(HMENU)0,ins,NULL);
-    World=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,156,375,15,hwnd,(HMENU)0,ins,NULL);
-    CreateWindow("STATIC","MODE:",WS_CHILD|WS_VISIBLE,4,176,65,15,hwnd,(HMENU)0,ins,NULL);
-    Mode=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,176,375,15,hwnd,(HMENU)0,ins,NULL);
+        CreateWindow("STATIC","NAME:",WS_CHILD|WS_VISIBLE,4,116,65,15,hwnd,(HMENU)0,ins,NULL);
+        Name=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,116,375,15,hwnd,(HMENU)0,ins,NULL);
+        CreateWindow("STATIC","VERSION:",WS_CHILD|WS_VISIBLE,4,136,65,15,hwnd,(HMENU)0,ins,NULL);
+        Version=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,136,375,15,hwnd,(HMENU)0,ins,NULL);
+        CreateWindow("STATIC","WORLD:",WS_CHILD|WS_VISIBLE,4,156,65,15,hwnd,(HMENU)0,ins,NULL);
+        World=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,156,375,15,hwnd,(HMENU)0,ins,NULL);
+        CreateWindow("STATIC","MODE:",WS_CHILD|WS_VISIBLE,4,176,65,15,hwnd,(HMENU)0,ins,NULL);
+        Mode=CreateWindow("EDIT","",WS_CHILD|WS_VISIBLE|ES_READONLY,77,176,375,15,hwnd,(HMENU)0,ins,NULL);
 
 	S[0]=CreateWindow("BUTTON","Server1",WS_CHILD|WS_VISIBLE|WS_DISABLED,194,8,60,20,hwnd,(HMENU)ID_SERVER_1,ins,NULL);
 	S[1]=CreateWindow("BUTTON","Server2",WS_CHILD|WS_VISIBLE|WS_DISABLED,260,8,60,20,hwnd,(HMENU)ID_SERVER_2,ins,NULL);
 	S[2]=CreateWindow("BUTTON","Server3",WS_CHILD|WS_VISIBLE|WS_DISABLED,326,8,60,20,hwnd,(HMENU)ID_SERVER_3,ins,NULL);
 	S[3]=CreateWindow("BUTTON","Server4",WS_CHILD|WS_VISIBLE|WS_DISABLED,392,8,60,20,hwnd,(HMENU)ID_SERVER_4,ins,NULL);
 
-    CenterOnScreen();
-    WSAStartup(MAKEWORD(2,0),&wsaData);
-	
+        CenterOnScreen();
+        WSAStartup(MAKEWORD(2,0),&wsaData);
   }
   break;
     
@@ -316,38 +309,22 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
            { 
               CreateThread(0,0,(LPTHREAD_START_ROUTINE)Ping,0,0,0); 
            } break; 
-           case ID_SERVER_1:
-           {
-                ShowConfig(0);
-           } break;
-           case ID_SERVER_2:
-           {
-                ShowConfig(1);
-           } break;
-           case ID_SERVER_3:
-           {
-                ShowConfig(2);
-           } break;
-           case ID_SERVER_4:
-           {
-                ShowConfig(3);
-           } break;
-//-----------------------------------------------------------------------------                                           
+           case ID_SERVER_1: { ShowConfig(0); } break;
+           case ID_SERVER_2: { ShowConfig(1); } break;
+           case ID_SERVER_3: { ShowConfig(2); } break;
+           case ID_SERVER_4: { ShowConfig(3); } break;                     
        }
        break;  
-        case WM_DESTROY:
-        {
-             WSACleanup();
-            PostQuitMessage (0);
-        }
-            break;
+  case WM_DESTROY:
+  {
+          WSACleanup();
+          PostQuitMessage (0);
+  } break;
         default: 
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
-
     return 0;
 }
-
 
 int WINAPI WinMain (HINSTANCE hThisInstance, HINSTANCE a,LPSTR b, int nFunsterStil)
 {
@@ -392,4 +369,3 @@ void CenterOnScreen()
 	 nY=((rcDesktop.bottom - rcDesktop.top) / 2) -((rcClient.bottom - rcClient.top) / 2);
 SetWindowPos(hWnd, NULL, nX, nY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
-
