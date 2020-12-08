@@ -19,3 +19,17 @@ and change the Router Settings.
 IMPORTANT:
 If Ping fails enable option [ bind ].(FIREWALL WARNING)
 
+#SETTINGS (12345 is port in IntPort field)
+Option 1
+         ExtPort              IntPort
+    Start      End       Start       End
+    19132      19132     12345       12345
+#With hostname:19132 others can join your world but they cant see CurrentPlayers and PingStatus
+This way you only have to update hostame if your IP changes.
+
+Option 2
+         ExtPort              IntPort
+    Start      End       Start       End
+    12345      12345     12345       12345
+#With hostname:12345 others can join your world & they can see CurrentPlayers and PingStatus.
+This way when you run MCPE as Server the port changes and you have to share it again.
