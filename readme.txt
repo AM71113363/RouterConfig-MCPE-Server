@@ -19,13 +19,13 @@ and change the Router Settings.
 IMPORTANT:
 If Ping fails enable option [ bind ].(FIREWALL WARNING)
 
-#SETTINGS (12345 is port in IntPort field)
+#SETTINGS (example "12345" is the port in IntPort field)
 Option 1
          ExtPort              IntPort
     Start      End       Start       End
     19132      19132     12345       12345
-#With hostname:19132 others can join your world but they cant see CurrentPlayers and PingStatus
-This way you only have to update hostame if your IP changes.
+#With hostname:19132 others can join your world but they cant see CurrentPlayers and PingStatus.
+This way you only have to update hostname if your IP changes.
 
 Option 2
          ExtPort              IntPort
