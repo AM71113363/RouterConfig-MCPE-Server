@@ -1,7 +1,7 @@
 #if you dont know how portforwarding works, this "readme" its not for YOU.
 
 
-build.bat will work only with Compiler:  Dev-C++ 4.9.9.*
+build.bat will work only with Dev-C++ 4.9.9.*
 
 //MCPE version 1.16.*
 1.Start MCPE with Multiplayer [ON] (LogOut,you can use it without Xbox Login[ You can change your name ] )
