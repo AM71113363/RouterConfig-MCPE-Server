@@ -33,3 +33,12 @@ Option 2
     12345      12345     12345       12345
 #With hostname:12345 others can join your world & they can see CurrentPlayers and PingStatus.
 This way when you run MCPE as Server the port changes and you have to share it again.
+
+Option 3
+Add two port forwarding rules
+        ExtPort               IntPort 
+    Start      End       Start       End 
+    19132      19132     19132       19132
+    12345      12345     12345       12345
+
+ #use option 3, optiom 1&2 work with previous versions,idk if it will work with latest releases.
