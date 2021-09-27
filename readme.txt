@@ -20,25 +20,16 @@ IMPORTANT:
 If Ping fails enable option [ bind ].(FIREWALL WARNING)
 
 #SETTINGS (example "12345" is the port in IntPort field)
-Option 1
          ExtPort              IntPort
     Start      End       Start       End
     19132      19132     12345       12345
-#With hostname:19132 others can join your world but they cant see CurrentPlayers and PingStatus.
-This way you only have to update hostname if your IP changes.
 
-Option 2
-         ExtPort              IntPort
-    Start      End       Start       End
-    12345      12345     12345       12345
-#With hostname:12345 others can join your world & they can see CurrentPlayers and PingStatus.
-This way when you run MCPE as Server the port changes and you have to share it again.
-
-Option 3
 Add two port forwarding rules
         ExtPort               IntPort 
     Start      End       Start       End 
     19132      19132     19132       19132
     12345      12345     12345       12345
 
- #use option 3, optiom 1&2 work with previous versions,idk if it will work with latest releases.
+ #Share hostname:19132, and it always work.
+Just change the port 12345 whenever the port changes.
+
