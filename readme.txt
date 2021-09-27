@@ -12,7 +12,6 @@ build.bat will work only with Dev-C++ 4.9.9.*
 6.Done
 
 NOTE:
-Your "friends" can join your world even if your server doesn't show >> The number of players or PingStatus.
 Each time you run MCPE as Server the port will change,you have to run RouterConfig.exe to get the current Port
 and change the Router Settings.
 
